@@ -93,14 +93,17 @@ public class App {
         Map <NoteSign, Integer> noteWithHeigh = new TreeMap<NoteSign, Integer>();
         for (Note note : noteList) {
             if(!noteWithHeigh.containsKey(note.sign())){
-                noteWithHeigh.put(note.sign(), note.sign().getMidi());
+                noteWithHeigh.put(note.sign(), 1);
+            }
+            else{
+                noteWithHeigh.put(note.sign(), noteWithHeigh.get(note.sign()) + 1);
             }
         }
         return noteWithHeigh;
     }
-    public static Map<Double, Integer> analyzeInterval(List<Note> noteList){
-        Map<Double, Integer> intervalWithFrequency = new TreeMap<>();
-        double interval;
+    public static Map<Integer, Integer> analyzeInterval(List<Note> noteList){
+        Map<Integer, Integer> intervalWithFrequency = new TreeMap<>();
+        Integer interval;
         for(int i = 1; i < noteList.size();i++){
             interval = noteList.get(i).sign().diffInSemitones(noteList.get(i-1).sign());
             if(intervalWithFrequency.containsKey(interval)){
