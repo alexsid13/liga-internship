@@ -102,7 +102,7 @@ public class App {
         Map<Double, Integer> intervalWithFrequency = new TreeMap<>();
         double interval;
         for(int i = 1; i < noteList.size();i++){
-            interval = Math.abs(noteList.get(i).sign().getMidi() - noteList.get(i-1).sign().getMidi());
+            interval = noteList.get(i).sign().diffInSemitones(noteList.get(i-1).sign());
             if(intervalWithFrequency.containsKey(interval)){
                 intervalWithFrequency.put(interval, intervalWithFrequency.get(interval)+1);
             }
