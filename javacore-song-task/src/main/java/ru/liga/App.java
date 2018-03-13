@@ -6,6 +6,7 @@ import ru.liga.songtask.domain.NoteSign;
 import ru.liga.songtask.domain.SimpleMidiFile;
 import sun.applet.Main;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -34,28 +35,32 @@ import java.util.*;
  */
 public class App {
     public static void main(String[] args) {
-        SimpleMidiFile simpleMidiFile = new SimpleMidiFile(Content.ZOMBIE);
-        NoteSign highestNote = findHighestNote(simpleMidiFile.vocalNoteList());
-        NoteSign lowestNote = findLowestNote(simpleMidiFile.vocalNoteList());
-        System.out.println("Всего нот: " + simpleMidiFile.vocalNoteList().size());
-        System.out.println("<p>");
+        try(PrintStream writer = new PrintStream(new FileOutputStream("Analyze.txt"))) {
+            SimpleMidiFile simpleMidiFile = new SimpleMidiFile(Content.ZOMBIE);
+            NoteSign highestNote = findHighestNote(simpleMidiFile.vocalNoteList());
+            NoteSign lowestNote = findLowestNote(simpleMidiFile.vocalNoteList());
+            writer.println("Всего нот: " + simpleMidiFile.vocalNoteList().size());
+            writer.println("<p>");
 
-        System.out.println("Анализ диапазона:");
-        System.out.println("верхняя: " + highestNote.fullName());
-        System.out.println("нижняя: " + lowestNote.fullName());
-        System.out.println("диапазон: " + highestNote.diffInSemitones(lowestNote));
-        System.out.println("<p>");
+            writer.println("Анализ диапазона:");
+            writer.println("верхняя: " + highestNote.fullName());
+            writer.println("нижняя: " + lowestNote.fullName());
+            writer.println("диапазон: " + highestNote.diffInSemitones(lowestNote));
+            writer.println("<p>");
 
-        System.out.println("Анализ длительности нот (мс):");
-        analyzeDuration(simpleMidiFile.vocalNoteList()).forEach((duration, freguency) -> System.out.println(Math.round(duration * simpleMidiFile.tickInMs()) + ": " + freguency));
-        System.out.println("<p>");
+            writer.println("Анализ длительности нот (мс):");
+            analyzeDuration(simpleMidiFile.vocalNoteList()).forEach((duration, freguency) -> writer.println(Math.round(duration * simpleMidiFile.tickInMs()) + ": " + freguency));
+            writer.println("<p>");
 
-        System.out.println("Анализ нот по высоте:");
-        analyzeHeight(simpleMidiFile.vocalNoteList()).forEach((note, height) -> System.out.println(note.fullName() + ": " + height));
-        System.out.println("<p>");
-
-        System.out.println("Анализ интервалов:");
-        analyzeInterval(simpleMidiFile.vocalNoteList()).forEach((interval ,frequency) -> System.out.println(interval + ": " + frequency));
+            writer.println("Анализ нот по высоте:");
+            analyzeHeight(simpleMidiFile.vocalNoteList()).forEach((note, height) -> writer.println(note.fullName() + ": " + height));
+            writer.println("<p>");
+            
+            writer.println("Анализ интервалов:");
+            analyzeInterval(simpleMidiFile.vocalNoteList()).forEach((interval ,frequency) -> writer.println(interval + ": " + frequency));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 //        System.out.println("Длительность (сек): " + simpleMidiFile.durationMs() / 1000);
     }
 
