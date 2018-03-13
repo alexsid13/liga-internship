@@ -38,7 +38,6 @@ public class App {
     private static Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
-        try (PrintStream writer = new PrintStream(new FileOutputStream("Analyze.txt"))) {
             SimpleMidiFile simpleMidiFile = new SimpleMidiFile(Content.ZOMBIE);
             LoggerMidi loggerMidi = new LoggerMidi();
             WriterInFile writerInFile = new WriterInFile();
@@ -57,10 +56,6 @@ public class App {
 
             loggerMidi.loggingIntervals(simpleMidiFile);
             writerInFile.writeIntervals(simpleMidiFile);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-//        System.out.println("Длительность (сек): " + simpleMidiFile.durationMs() / 1000);
-    }
 }
 
