@@ -1,14 +1,10 @@
 package ru.liga;
 
-import ru.liga.songtask.content.Content;
-import ru.liga.songtask.domain.Note;
-import ru.liga.songtask.domain.NoteSign;
+
 import ru.liga.songtask.domain.SimpleMidiFile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.List;
+
 
 /**
  * Всего нот: 15
@@ -35,27 +31,31 @@ import java.util.List;
  * 11: 2
  */
 public class App {
-    private static Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
-            SimpleMidiFile simpleMidiFile = new SimpleMidiFile(Content.ZOMBIE);
-            LoggerMidi loggerMidi = new LoggerMidi();
-            WriterInFile writerInFile = new WriterInFile();
-
-            loggerMidi.loggingNumber(simpleMidiFile);
-            writerInFile.writeNumber(simpleMidiFile);
-
-            loggerMidi.loggingRange(simpleMidiFile);
-            writerInFile.writeRange(simpleMidiFile);
-
-            loggerMidi.loggingDuration(simpleMidiFile);
-            writerInFile.writeDuration(simpleMidiFile);
-
-            loggerMidi.loggingHeight(simpleMidiFile);
-            writerInFile.writeHeight(simpleMidiFile);
-
-            loggerMidi.loggingIntervals(simpleMidiFile);
-            writerInFile.writeIntervals(simpleMidiFile);
-        }
+            if(args[1].equals("analyze")){
+                    if(args.length >2){
+                            SimpleMidiFile simpleMidiFile = new SimpleMidiFile(new File(args[0]));
+                            WriterInFile writerInFile = new WriterInFile(simpleMidiFile);
+                            writerInFile.writeNumber();
+                            writerInFile.writeRange();
+                            writerInFile.writeDuration();
+                            writerInFile.writeHeight();
+                            writerInFile.writeIntervals();
+                    }
+                    SimpleMidiFile simpleMidiFile = new SimpleMidiFile(new File(args[0]));
+                    LoggerMidi loggerMidi = new LoggerMidi(simpleMidiFile);
+                    loggerMidi.loggingNumber();
+                    loggerMidi.loggingRange();
+                    loggerMidi.loggingDuration();
+                    loggerMidi.loggingHeight();
+                    loggerMidi.loggingIntervals();
+            }
+            else if(args[1].equals("change")) {
+                    SimpleMidiFile simpleMidiFile = new SimpleMidiFile(new File(args[0]));
+                    Trans trans = new Trans(simpleMidiFile);
+                    trans.make();
+            }
+    }
 }
 

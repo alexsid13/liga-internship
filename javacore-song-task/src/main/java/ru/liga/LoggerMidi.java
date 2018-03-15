@@ -10,10 +10,14 @@ import ru.liga.songtask.domain.SimpleMidiFile;
  */
 public class LoggerMidi {
     private static Logger logger = LoggerFactory.getLogger(LoggerMidi.class);
-    public void loggingNumber(SimpleMidiFile simpleMidiFile){
+    private SimpleMidiFile simpleMidiFile;
+    public LoggerMidi(SimpleMidiFile simpleMidiFile){
+        this.simpleMidiFile = simpleMidiFile;
+    }
+    public void loggingNumber(){
         logger.info("Всего нот: " + simpleMidiFile.vocalNoteList().size());
     }
-    public void loggingRange(SimpleMidiFile simpleMidiFile){
+    public void loggingRange(){
         NoteSign highestNote = Analyzer.findHighestNote(simpleMidiFile.vocalNoteList());
         NoteSign lowestNote = Analyzer.findLowestNote(simpleMidiFile.vocalNoteList());
         logger.info("Анализ диапазона:");
@@ -21,15 +25,15 @@ public class LoggerMidi {
         logger.info("нижняя: " + lowestNote.fullName());
         logger.info("диапазон: " + highestNote.diffInSemitones(lowestNote));
     }
-    public void loggingDuration(SimpleMidiFile simpleMidiFile){
+    public void loggingDuration(){
         logger.info("Анализ длительности нот (мс):");
         Analyzer.analyzeDuration(simpleMidiFile.vocalNoteList()).forEach((duration, freguency) -> logger.info(Math.round(duration * simpleMidiFile.tickInMs()) + ": " + freguency));
     }
-    public void loggingHeight(SimpleMidiFile simpleMidiFile){
+    public void loggingHeight(){
         logger.info("Анализ нот по высоте:");
         Analyzer.analyzeHeight(simpleMidiFile.vocalNoteList()).forEach((note, height) -> logger.info(note.fullName() + ": " + height));
     }
-    public void loggingIntervals(SimpleMidiFile simpleMidiFile){
+    public void loggingIntervals(){
         logger.info("Анализ интервалов:");
         Analyzer.analyzeInterval(simpleMidiFile.vocalNoteList()).forEach((interval, frequency) -> logger.info(interval + ": " + frequency));
     }

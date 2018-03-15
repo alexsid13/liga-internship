@@ -12,18 +12,20 @@ import java.io.PrintStream;
  */
 public class WriterInFile {
     private PrintStream writer;
-    public WriterInFile(){
+    private SimpleMidiFile simpleMidiFile;
+    public WriterInFile(SimpleMidiFile simpleMidiFil){
         try {
             writer = new PrintStream(new FileOutputStream("Analyze.txt"));
+            this.simpleMidiFile = simpleMidiFile;
         }catch (IOException e){
             e.printStackTrace();
         }
     }
-    public void writeNumber(SimpleMidiFile simpleMidiFile){
+    public void writeNumber(){
         writer.println("Всего нот: " + simpleMidiFile.vocalNoteList().size());
         writer.println("<p>");
     }
-    public void writeRange(SimpleMidiFile simpleMidiFile){
+    public void writeRange(){
         NoteSign highestNote = Analyzer.findHighestNote(simpleMidiFile.vocalNoteList());
         NoteSign lowestNote = Analyzer.findLowestNote(simpleMidiFile.vocalNoteList());
         writer.println("Анализ диапазона:");
@@ -32,17 +34,17 @@ public class WriterInFile {
         writer.println("диапазон: " + highestNote.diffInSemitones(lowestNote));
         writer.println("<p>");
     }
-    public void writeDuration(SimpleMidiFile simpleMidiFile){
+    public void writeDuration(){
         writer.println("Анализ длительности нот (мс):");
         Analyzer.analyzeDuration(simpleMidiFile.vocalNoteList()).forEach((duration, freguency) -> writer.println(Math.round(duration * simpleMidiFile.tickInMs()) + ": " + freguency));
         writer.println("<p>");
     }
-    public void writeHeight(SimpleMidiFile simpleMidiFile){
+    public void writeHeight(){
         writer.println("Анализ нот по высоте:");
         Analyzer.analyzeHeight(simpleMidiFile.vocalNoteList()).forEach((note, height) -> writer.println(note.fullName() + ": " + height));
         writer.println("<p>");
     }
-    public void writeIntervals(SimpleMidiFile simpleMidiFile){
+    public void writeIntervals(){
         writer.println("Анализ интервалов:");
         Analyzer.analyzeInterval(simpleMidiFile.vocalNoteList()).forEach((interval, frequency) -> writer.println(interval + ": " + frequency));
     }
